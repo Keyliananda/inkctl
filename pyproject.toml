@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "inkctl-inkscape"
+version = "0.1.0"
+description = "Command-line tooling for creating and editing SVG files with Inkscape."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "lxml>=4.9.0",
+]
+
+[project.scripts]
+inkctl = "inkctl:main"
+
+[tool.setuptools]
+py-modules = ["inkctl"]
+
+[tool.setuptools.packages.find]
+include = ["commands*", "inkscape_cli*"]

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="256" height="256" viewBox="0 0 256 256" role="img" aria-label="Calisthenics pull-up station icon">
+
+  <!-- Pull-up station -->
+  <g id="station_group" inkscape:label="Pull-up Station">
+    <rect id="post_left" inkscape:label="Post Left" x="44" y="28" width="8" height="216" rx="3" fill="#1a1a1a"/>
+    <rect id="post_right" inkscape:label="Post Right" x="204" y="28" width="8" height="216" rx="3" fill="#1a1a1a"/>
+    <rect id="bar_top" inkscape:label="Bar Top" x="44" y="28" width="168" height="8" rx="3" fill="#1a1a1a"/>
+  </g>
+
+  <!-- Human silhouette doing a pull-up -->
+  <g id="figure_group" inkscape:label="Figure Silhouette">
+    <!-- Head -->
+    <ellipse id="head" inkscape:label="Head" cx="128" cy="52" rx="12" ry="14" fill="#1a1a1a"/>
+
+    <!-- Body silhouette as single path -->
+    <path id="body" inkscape:label="Body" fill="#1a1a1a" d="
+      M 96 32
+      C 92 32, 88 34, 86 38
+      L 82 48
+      C 80 52, 82 56, 86 58
+      L 96 62
+      C 100 64, 104 66, 108 68
+      L 110 70
+      C 112 74, 114 78, 116 82
+      L 118 90
+      C 120 100, 122 110, 122 120
+      L 120 130
+      C 118 136, 116 140, 112 146
+      L 106 158
+      C 102 166, 98 176, 96 186
+      L 94 198
+      C 92 206, 94 212, 98 214
+      C 102 216, 106 214, 108 210
+      L 114 196
+      C 118 188, 120 180, 122 172
+      L 124 164
+      C 126 162, 128 162, 130 164
+      L 132 170
+      C 134 178, 136 186, 140 194
+      L 144 204
+      C 146 210, 144 216, 140 220
+      C 136 224, 130 226, 126 228
+      C 122 230, 118 228, 118 224
+      L 120 218
+      C 122 214, 126 212, 130 214
+      L 136 218
+      C 140 218, 144 214, 144 210
+      L 142 200
+      C 140 192, 136 182, 132 174
+      L 128 166
+      C 126 162, 124 162, 122 166
+      L 118 178
+      C 114 186, 110 194, 106 204
+      L 102 210
+      Z
+    "/>
+  </g>
+</svg>
