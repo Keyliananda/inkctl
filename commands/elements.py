@@ -1,4 +1,4 @@
-"""Befehle zum Entfernen von SVG-Elementen per ID."""
+"""Befehle zum Verwalten von SVG-Elementen per ID."""
 
 import json
 import shutil
@@ -44,6 +44,23 @@ def cmd_remove_elements(args) -> str:
     )
 
 
+def cmd_select_elements(args) -> str:
+    """Öffnet Inkscape mit vorausgewählten Elementen."""
+    from inkscape_cli.runner import InkscapeRunner
+
+    runner = InkscapeRunner()
+    ids = [element_id.strip() for element_id in args.ids.split(",") if element_id.strip()]
+
+    action_parts = [f"select-by-id:{element_id}" for element_id in ids]
+    actions = "; ".join(action_parts)
+
+    result = runner.run_actions(actions, input_file=args.file, batch=False)
+
+    if result.returncode == 0:
+        return f"{len(ids)} Elemente in Inkscape ausgewählt."
+    return f"Fehler: {result.stderr}"
+
+
 def register_elements_commands(subparsers):
     """Registriert Element-Befehle im CLI."""
     parser = subparsers.add_parser("remove-elements", help="Elemente per ID entfernen")
@@ -52,3 +69,11 @@ def register_elements_commands(subparsers):
     parser.add_argument("--backup", action="store_true", help="Backup erstellen")
     parser.add_argument("--dry-run", action="store_true", help="Nur anzeigen, nicht ändern")
     parser.set_defaults(func=cmd_remove_elements)
+
+    parser = subparsers.add_parser(
+        "select-elements",
+        help="Elemente in Inkscape auswählen",
+    )
+    parser.add_argument("--file", required=True, help="SVG-Datei")
+    parser.add_argument("--ids", required=True, help="Komma-separierte Element-IDs")
+    parser.set_defaults(func=cmd_select_elements)
