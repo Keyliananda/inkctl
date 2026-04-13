@@ -20,6 +20,9 @@ Das Projekt ist sinnvoll, wenn du:
 - Ebenen anlegen und auflisten
 - Füll- und Konturfarben ändern
 - SVG-Elemente per ID entfernen
+- Elemente in Inkscape per ID auswählen
+- aktuell ausgewählte Element-IDs aus Inkscape auslesen
+- inkctl-Extension für den Selektionsexport installieren
 - rohe Inkscape-Actions ausführen
 - SVG-Dateien nach PNG oder PDF exportieren
 
@@ -207,6 +210,64 @@ inkctl remove-elements \
 }
 ```
 
+## `select-elements`
+
+Mit `select-elements` öffnest du Inkscape mit einer Datei und einer vorausgewählten Menge an Element-IDs.
+
+### Syntax
+
+```bash
+inkctl select-elements --file <svg-path> --ids id1,id2,id3
+```
+
+### Beispiel
+
+```bash
+inkctl select-elements \
+  --file floorplan.svg \
+  --ids ellipse790,circle790,ellipse791
+```
+
+## `install-extension`
+
+Damit `get-selection` funktioniert, muss die inkctl-Inkscape-Extension installiert sein.
+
+### Syntax
+
+```bash
+inkctl install-extension
+```
+
+Der Befehl kopiert `export_selection.py` und `export_selection.inx` in den systemabhängigen Inkscape-Extensions-Ordner und fordert danach zu einem Neustart von Inkscape auf.
+
+## `get-selection`
+
+`get-selection` liest die zuletzt von der Inkscape-Extension exportierte Auswahl aus `/tmp/inkscape_selection.json`.
+
+### Syntax
+
+```bash
+inkctl get-selection --file <svg-path>
+```
+
+### Workflow
+
+1. `inkctl install-extension`
+2. Inkscape neu starten
+3. In Inkscape Elemente auswählen
+4. In Inkscape `Extensions > inkctl > Export Selection IDs` ausführen
+5. `inkctl get-selection --file <svg-path>`
+
+### Beispielantwort
+
+```json
+{
+  "file": "/Users/name/projects/floorplan.svg",
+  "selected_ids": ["ellipse790", "circle790"],
+  "count": 2
+}
+```
+
 ## Befehlsübersicht
 
 Aktuell verfügbare Kommandos:
@@ -225,6 +286,9 @@ Aktuell verfügbare Kommandos:
 - `change-fill`
 - `change-stroke`
 - `remove-elements`
+- `select-elements`
+- `get-selection`
+- `install-extension`
 
 Hilfe zu einem einzelnen Befehl bekommst du jeweils mit:
 

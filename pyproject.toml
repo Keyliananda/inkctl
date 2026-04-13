@@ -20,3 +20,6 @@ py-modules = ["inkctl"]
 
 [tool.setuptools.packages.find]
 include = ["commands*", "inkscape_cli*"]
+
+[tool.setuptools.package-data]
+inkscape_cli = ["extensions/*.py", "extensions/*.inx"]
