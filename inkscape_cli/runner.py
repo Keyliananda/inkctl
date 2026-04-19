@@ -96,6 +96,32 @@ class InkscapeRunner:
             return [line.strip() for line in result.stdout.splitlines() if line.strip()]
         return []
 
+    def query_all(self, input_file: str) -> dict[str, dict[str, float]]:
+        """Liest Bounding-Boxen aller SVG-Objekte via Inkscape aus."""
+        result = subprocess.run(
+            [self.inkscape_path, "--query-all", input_file],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        if result.returncode != 0:
+            message = result.stderr.strip() or "query-all fehlgeschlagen."
+            raise RuntimeError(message)
+
+        boxes: dict[str, dict[str, float]] = {}
+        for line in result.stdout.splitlines():
+            parts = [part.strip() for part in line.split(",")]
+            if len(parts) != 5:
+                continue
+            element_id, x, y, width, height = parts
+            boxes[element_id] = {
+                "x": float(x),
+                "y": float(y),
+                "width": float(width),
+                "height": float(height),
+            }
+        return boxes
+
     def get_version(self) -> str:
         """Gibt die installierte Inkscape-Version zurück."""
         result = subprocess.run(

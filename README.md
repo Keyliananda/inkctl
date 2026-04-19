@@ -23,6 +23,8 @@ Das Projekt ist sinnvoll, wenn du:
 - Elemente in Inkscape per ID auswählen
 - aktuell ausgewählte Element-IDs aus Inkscape auslesen
 - inkctl-Extension für den Selektionsexport installieren
+- maschinenlesbare CLI-Capabilities als JSON ausgeben
+- JSON-Hilfe für einzelne Commands ausgeben
 - rohe Inkscape-Actions ausführen
 - SVG-Dateien nach PNG oder PDF exportieren
 
@@ -113,6 +115,18 @@ Der Wrapper `./inkctl` nutzt automatisch das lokale virtuelle Environment.
 
 ```bash
 inkctl --help
+```
+
+### Maschinenlesbare Capabilities ausgeben
+
+```bash
+inkctl capabilities --json
+```
+
+### JSON-Hilfe für einen einzelnen Command
+
+```bash
+inkctl get-selection --help --json
 ```
 
 ### SVG-Informationen anzeigen
@@ -242,7 +256,7 @@ Der Befehl kopiert `export_selection.py` und `export_selection.inx` in den syste
 
 ## `get-selection`
 
-`get-selection` liest die zuletzt von der Inkscape-Extension exportierte Auswahl aus `/tmp/inkscape_selection.json`.
+`get-selection` liest die zuletzt von der Inkscape-Extension an `inkctl` gesendete Auswahl aus `/tmp/inkscape_selection.json`.
 
 ### Syntax
 
@@ -255,7 +269,7 @@ inkctl get-selection --file <svg-path>
 1. `inkctl install-extension`
 2. Inkscape neu starten
 3. In Inkscape Elemente auswählen
-4. In Inkscape `Extensions > inkctl > Export Selection IDs` ausführen
+4. In Inkscape `Extensions > inkctl > Send Selection to AI` ausführen
 5. `inkctl get-selection --file <svg-path>`
 
 ### Beispielantwort
@@ -266,6 +280,58 @@ inkctl get-selection --file <svg-path>
   "selected_ids": ["ellipse790", "circle790"],
   "count": 2
 }
+```
+
+## `capabilities`
+
+`capabilities` gibt die verfügbaren Commands maschinenlesbar als JSON aus. Das ist speziell für Agenten und andere Tools gedacht, die erst verstehen müssen, welche Befehle `inkctl` unterstützt.
+
+### Syntax
+
+```bash
+inkctl capabilities --json
+```
+
+### Beispielantwort
+
+```json
+{
+  "program": "inkctl",
+  "description": "Inkscape CLI Addon - SVG-Dateien erstellen und bearbeiten",
+  "usage": "usage: inkctl [-h] {...}",
+  "commands": [
+    {
+      "name": "get-selection",
+      "summary": "Aktuelle Inkscape-Selektion auslesen",
+      "usage": "usage: inkctl get-selection [-h] --file FILE",
+      "arguments": [
+        {
+          "name": "file",
+          "kind": "option",
+          "option_strings": ["--file"],
+          "required": true,
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## JSON-Hilfe pro Command
+
+Mit `--help --json` lässt sich die Hilfe eines einzelnen Commands in strukturierter Form ausgeben.
+
+### Syntax
+
+```bash
+inkctl <command> --help --json
+```
+
+### Beispiel
+
+```bash
+inkctl get-selection --help --json
 ```
 
 ## Befehlsübersicht
@@ -289,6 +355,7 @@ Aktuell verfügbare Kommandos:
 - `select-elements`
 - `get-selection`
 - `install-extension`
+- `capabilities`
 
 Hilfe zu einem einzelnen Befehl bekommst du jeweils mit:
 

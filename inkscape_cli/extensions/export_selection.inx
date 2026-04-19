@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
-  <name>Export Selection IDs</name>
+  <name>Send Selection to AI</name>
   <id>org.inkctl.export_selection</id>
   <effect>
     <effects-menu>

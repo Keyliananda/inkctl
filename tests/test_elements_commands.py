@@ -86,5 +86,53 @@ class InstallExtensionCommandTests(unittest.TestCase):
             self.assertIn(str(target_dir), output)
 
 
+class FindSimilarElementsCommandTests(unittest.TestCase):
+    def test_uses_exported_selection_and_returns_similar_ids(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            selection_path = Path(tmpdir) / "inkscape_selection.json"
+            svg_path = Path(tmpdir) / "drawing.svg"
+            svg_path.write_text(
+                """
+                <svg xmlns="http://www.w3.org/2000/svg">
+                  <path id="ref1" stroke="#b5c3d1" vector-effect="non-scaling-stroke" d="M 0,0 L 5,5" />
+                  <path id="match1" stroke="#b5c3d1" vector-effect="non-scaling-stroke" d="M 1,1 L 6,6" />
+                  <path id="too-large" stroke="#b5c3d1" vector-effect="non-scaling-stroke" d="M 2,2 L 20,20" />
+                  <path id="other-stroke" stroke="#808080" vector-effect="non-scaling-stroke" d="M 3,3 L 8,8" />
+                </svg>
+                """,
+                encoding="utf-8",
+            )
+            selection_path.write_text(
+                json.dumps(
+                    {
+                        "file": str(svg_path),
+                        "selected_ids": ["ref1"],
+                        "count": 1,
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            geometry = {
+                "ref1": {"x": 0.0, "y": 0.0, "width": 10.0, "height": 6.0},
+                "match1": {"x": 1.0, "y": 1.0, "width": 9.0, "height": 6.5},
+                "too-large": {"x": 2.0, "y": 2.0, "width": 40.0, "height": 28.0},
+                "other-stroke": {"x": 3.0, "y": 3.0, "width": 9.5, "height": 6.2},
+            }
+
+            with (
+                mock.patch.object(elements, "SELECTION_EXPORT_PATH", selection_path),
+                mock.patch.object(elements, "InkscapeRunner") as runner_cls,
+            ):
+                runner_cls.return_value.query_all.return_value = geometry
+                output = elements.cmd_find_similar_elements(Namespace(file=str(svg_path), ids=None, select=False))
+
+        data = json.loads(output)
+        self.assertEqual(data["reference_ids"], ["ref1"])
+        self.assertEqual(data["matched_ids"], ["match1"])
+        self.assertEqual(data["count"], 1)
+        self.assertEqual(data["missing_reference_ids"], [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,3 +1,5 @@
+"""Inkscape-Extension: sendet die aktuelle Auswahl an inkctl."""
+
 import json
 
 import inkex
